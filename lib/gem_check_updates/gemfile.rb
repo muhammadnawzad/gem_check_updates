@@ -45,7 +45,7 @@ module GemCheckUpdates
     def check_updates!
       EventMachine.synchrony do
         EventMachine::Synchrony::FiberIterator.new(@gems, CONCURRENCY).each do |gem|
-          http = EventMachine::HttpRequest.new("#{RUBYGEMS_API}/#{gem.name}.json").get
+          http = EventMachine::HttpRequest.new("#{RUBYGEMS_API}/#{gem.name}.json", tls: { verify_peer: true }).get
           response = JSON.parse(http.response)
           versions = response.map do |v|
             number = v['number']
